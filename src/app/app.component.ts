@@ -4,7 +4,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 @Component({
   selector: 'pp-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnDestroy {
   title = 'Pet Project';
@@ -14,7 +14,6 @@ export class AppComponent implements OnDestroy {
   fillerNav = [
     {title: 'Home', link: ''},
     {title: 'Users', link: 'users'},
-    {title: 'Missing', link: 'missing'}
   ];
 
   private _mobileQueryListener: () => void;
