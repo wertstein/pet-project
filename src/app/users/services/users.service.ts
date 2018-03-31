@@ -3,7 +3,7 @@ import { Http } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
-import { Item } from '../interfaces/item';
+import { Item } from '../../interfaces/item';
 
 class CItem implements Item {
   constructor(
@@ -13,7 +13,7 @@ class CItem implements Item {
 }
 
 @Injectable()
-export class ItemsService {
+export class UsersService {
   constructor(private http: Http) {}
 
   getAlbums(): Observable<any[]> {
