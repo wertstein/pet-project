@@ -2,10 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
-import { UsersComponent } from './users.component';
+import { UserDetailsComponent } from './components/user-details';
+import { UserListComponent } from './components/user-list';
 
 const usersRoutes: Routes = [
-  { path: 'users', component: UsersComponent },
+  { path: 'users', component: UserListComponent },
+  { path: 'user/:id', component: UserDetailsComponent }
 ];
 
 @NgModule({

@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
-import { HomeComponent } from './components/home/home.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { HomeComponent } from './components/home';
+import { PageNotFoundComponent } from './components/page-not-found';
 
-import { HeroesModule } from './users/users.module';
+import { UsersModule } from './users';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent, data: { title: 'Home' } },
@@ -18,7 +18,7 @@ const appRoutes: Routes = [
 
 @NgModule({
   imports: [
-    HeroesModule,
+    UsersModule,
 
     RouterModule.forRoot(
       appRoutes,

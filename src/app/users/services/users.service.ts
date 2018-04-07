@@ -1,30 +1,32 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
-import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map';
+import { HttpClient } from '@angular/common/http';
 
 import { Item } from '../../interfaces/item';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
-class CItem implements Item {
-  constructor(
-    public id: number,
-    public name: string,
-  ) {}
+class User implements Item {
+  id;
+  name;
+
+  constructor(user) {
+    this.id = user.id;
+    this.name = user.title;
+  }
 }
+
+const API = 'https://jsonplaceholder.typicode.com';
 
 @Injectable()
 export class UsersService {
-  constructor(private http: Http) {}
+  constructor(private http: HttpClient) {}
 
-  getAlbums(): Observable<any[]> {
-    return this.http
-      .get('https://jsonplaceholder.typicode.com/albums')
-      .map(res => {
-        return res
-          .json()
-          .map(item => {
-            return new CItem(item.id, item.title);
-          });
-      });
+  getOne(id: number): Observable<Object> {
+    return this.http.get(`${API}/albums/${id}`);
+  }
+
+  getList(): Observable<Object> {
+    return this.http.get(`${API}/albums`);
   }
 }
