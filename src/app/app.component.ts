@@ -14,6 +14,7 @@ export class AppComponent implements OnDestroy {
   fillerNav = [
     {title: 'Home', link: ''},
     {title: 'Users', link: 'users'},
+    {title: 'Admin', link: 'admin'},
   ];
 
   private _mobileQueryListener: () => void;

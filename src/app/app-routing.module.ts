@@ -6,6 +6,7 @@ import { HomeComponent } from './components/home';
 import { PageNotFoundComponent } from './components/page-not-found';
 
 import { UsersModule } from './users';
+import { AdminModule } from './admin';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent, data: { title: 'Home' } },
@@ -18,6 +19,7 @@ const appRoutes: Routes = [
 
 @NgModule({
   imports: [
+    AdminModule,
     UsersModule,
 
     RouterModule.forRoot(

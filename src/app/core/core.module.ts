@@ -1,13 +1,14 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpModule } from '@angular/http';
+import { AuthService } from '../services/auth.service';
 
 // import { SomeSingletonService } from './some-singleton/some-singleton.service';
 
 @NgModule({
-  imports: [CommonModule, HttpClientModule, HttpModule],
+  imports: [CommonModule, HttpClientModule],
   declarations: [],
+  providers: [AuthService],
   // providers: [SomeSingletonService]
 })
 export class CoreModule {
