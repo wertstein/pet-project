@@ -11,16 +11,22 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
-  declarations: [AppComponent, HomeComponent, PageNotFoundComponent],
+  declarations: [
+    AppComponent,
+    HomeComponent,
+    PageNotFoundComponent,
+    LoginComponent
+  ],
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
     CoreModule,
     SharedModule,
 
-    AppRoutingModule,
+    AppRoutingModule
   ],
   providers: [MediaMatcher],
   bootstrap: [AppComponent]

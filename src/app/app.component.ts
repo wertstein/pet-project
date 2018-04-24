@@ -15,6 +15,7 @@ export class AppComponent implements OnDestroy {
     {title: 'Home', link: ''},
     {title: 'Users', link: 'users'},
     {title: 'Admin', link: 'admin'},
+    {title: 'Login', link: 'login'},
   ];
 
   private _mobileQueryListener: () => void;

@@ -7,10 +7,13 @@ import { PageNotFoundComponent } from './components/page-not-found';
 
 import { UsersModule } from './users';
 import { AdminModule } from './admin';
+import { LoginComponent } from './components/login/login.component';
 
 const appRoutes: Routes = [
   { path: 'home', component: HomeComponent, data: { title: 'Home' } },
-  { path: '',
+  { path: 'login', component: LoginComponent, data: { title: 'Login' } },
+  {
+    path: '',
     redirectTo: '/home',
     pathMatch: 'full'
   },
@@ -23,12 +26,10 @@ const appRoutes: Routes = [
     UsersModule,
 
     RouterModule.forRoot(
-      appRoutes,
+      appRoutes
       // { enableTracing: true } // <-- debugging purposes only
     )
   ],
-  exports: [
-    RouterModule
-  ]
+  exports: [RouterModule]
 })
 export class AppRoutingModule {}
