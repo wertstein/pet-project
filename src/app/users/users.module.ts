@@ -7,10 +7,11 @@ import { UsersRoutingModule } from './users-routing.module';
 import { UserDetailsComponent } from './components/user-details';
 import { UserListComponent } from './components/user-list';
 import { UsersService } from './services/users.service';
+import { UserDetailsResolver } from './services/user-details-resolver.service';
 
 @NgModule({
   imports: [CommonModule, FormsModule, SharedModule, UsersRoutingModule],
   declarations: [UserListComponent, UserDetailsComponent],
-  providers: [UsersService]
+  providers: [UsersService, UserDetailsResolver]
 })
 export class UsersModule {}

@@ -6,7 +6,7 @@ import { Item } from '../../interfaces/item';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
-class User implements Item {
+export class User implements Item {
   id;
   name;
 
@@ -22,11 +22,13 @@ const API = 'https://jsonplaceholder.typicode.com';
 export class UsersService {
   constructor(private http: HttpClient) {}
 
-  getOne(id: number): Observable<Object> {
+  // TODO: handle any
+  getOne(id: number): Observable<any> {
     return this.http.get(`${API}/albums/${id}`);
   }
 
-  getList(): Observable<Object> {
+  // TODO: handle any
+  getList(): Observable<any> {
     return this.http.get(`${API}/albums`);
   }
 }

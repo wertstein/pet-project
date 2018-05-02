@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/switchMap';
-import { UsersService } from '../../services/users.service';
+import { UsersService, User } from '../../services/users.service';
 
 @Component({
   selector: 'pp-user-details',
@@ -10,7 +8,7 @@ import { UsersService } from '../../services/users.service';
   styleUrls: ['./user-details.component.scss']
 })
 export class UserDetailsComponent implements OnInit {
-  user$: Observable<Object>;
+  user: User;
 
   constructor(
     private route: ActivatedRoute,
@@ -19,8 +17,9 @@ export class UserDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.user$ = this.route.paramMap.switchMap((params: ParamMap) =>
-      this.service.getOne(+params.get('id'))
-    );
+    this.route.data
+      .subscribe((data: { user: User }) => {
+        this.user = data.user;
+      });
   }
 }

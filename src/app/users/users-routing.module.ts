@@ -4,18 +4,19 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { UserDetailsComponent } from './components/user-details';
 import { UserListComponent } from './components/user-list';
+import { UserDetailsResolver } from './services/user-details-resolver.service';
 
 const usersRoutes: Routes = [
   { path: 'users', component: UserListComponent },
-  { path: 'user/:id', component: UserDetailsComponent }
+  {
+    path: 'user/:id',
+    component: UserDetailsComponent,
+    resolve: { user: UserDetailsResolver }
+  }
 ];
 
 @NgModule({
-  imports: [
-    RouterModule.forChild(usersRoutes)
-  ],
-  exports: [
-    RouterModule
-  ]
+  imports: [RouterModule.forChild(usersRoutes)],
+  exports: [RouterModule]
 })
 export class UsersRoutingModule {}
