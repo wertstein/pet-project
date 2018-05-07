@@ -7,9 +7,9 @@ import { UserListComponent } from './components/user-list';
 import { UserDetailsResolver } from './services/user-details-resolver.service';
 
 const usersRoutes: Routes = [
-  { path: 'users', component: UserListComponent },
+  { path: '', component: UserListComponent },
   {
-    path: 'user/:id',
+    path: ':id',
     component: UserDetailsComponent,
     resolve: { user: UserDetailsResolver }
   }
