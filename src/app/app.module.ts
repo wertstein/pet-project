@@ -7,6 +7,7 @@ import { CoreModule } from './core';
 import { SharedModule } from './shared';
 
 import { AppRoutingModule } from './app-routing.module';
+import { httpInterceptorProviders } from './http-interceptors';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
@@ -28,7 +29,10 @@ import { LoginComponent } from './components/login/login.component';
 
     AppRoutingModule
   ],
-  providers: [MediaMatcher],
+  providers: [
+    MediaMatcher,
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
