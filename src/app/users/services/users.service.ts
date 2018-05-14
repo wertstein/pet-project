@@ -3,8 +3,8 @@ import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
 
 import { Item } from '../../interfaces/item';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
+import { Observable } from 'rxjs';
+
 
 export class User implements Item {
   id;

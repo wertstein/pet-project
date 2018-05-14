@@ -1,11 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { UsersService } from './../../services/users.service';
 import { Item } from './../../../interfaces/item';
-
-import 'rxjs/add/operator/switchMap';
-import { Observable } from 'rxjs/Observable';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'pp-user-list',
@@ -23,11 +21,12 @@ export class UserListComponent implements OnInit {
   constructor(private service: UsersService, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.users$ = this.route.paramMap
-    .switchMap((params: ParamMap) => {
-      this.selectedId = +params.get('id');
+    this.users$ = this.route.paramMap.pipe(
+      switchMap((params: ParamMap) => {
+        this.selectedId = +params.get('id');
 
-      return this.service.getList();
-    });
+        return this.service.getList();
+      })
+    );
   }
 }
