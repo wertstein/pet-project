@@ -1,0 +1,24 @@
+<div *ngIf="authService.isLoggedIn; else loggedOut">
+  <p>Welcome {{ authService.user }}</p>
+  <p>
+    <button *ngIf="authService.isLoggedIn" mat-raised-button color="primary" (click)="logout()">Logout</button>
+  </p>
+</div>
+<ng-template #loggedOut>
+  <h2>LOGIN</h2>
+  <form [formGroup]="form">
+    <p>
+      <mat-form-field>
+        <input matInput placeholder="Email" type="text" formControlName="email">
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <input matInput placeholder="Password" type="password" formControlName="password">
+      </mat-form-field>
+    </p>
+    <p>
+      <button *ngIf="!authService.isLoggedIn" mat-raised-button color="primary" (click)="login()">Login</button>
+    </p>
+  </form>
+</ng-template>
