@@ -6,6 +6,8 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const errorHandler = require('errorhandler');
 
+const config = require('./config/config');
+
 //Configure mongoose's promise to global promise
 mongoose.promise = global.Promise;
 
@@ -21,21 +23,14 @@ app.use(require('morgan')('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(
-  session({
-    secret: 'passport-tutorial',
-    cookie: { maxAge: 60000 },
-    resave: false,
-    saveUninitialized: false
-  })
-);
+app.use(session(config.session));
 
 if (!isProduction) {
   app.use(errorHandler());
 }
 
 //Configure Mongoose
-mongoose.connect('mongodb://localhost/passport-tutorial');
+mongoose.connect(config.connectionString);
 mongoose.set('debug', true);
 
 //Models & routes

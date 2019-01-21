@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const config = require('./../config/config');
 
 const { Schema } = mongoose;
 
@@ -27,9 +28,8 @@ UsersSchema.methods.validatePassword = function(password) {
 UsersSchema.methods.generateJWT = function() {
   const today = new Date();
   const expirationDate = new Date(today);
-  expirationDate.setMinutes(today.getMinutes() + 1);
 
-  console.log('expirationDate', expirationDate);
+  expirationDate.setMinutes(today.getMinutes() + config.auth.tokenExpiration);
 
   return jwt.sign(
     {
