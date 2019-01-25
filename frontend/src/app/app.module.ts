@@ -1,19 +1,18 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
 import { MediaMatcher } from '@angular/cdk/layout';
-
-import { CoreModule } from './core';
-import { SharedModule } from './shared';
-
+import { NgModule } from '@angular/core';
+import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
 import { AppRoutingModule } from './app-routing.module';
+import { SharedModule } from './shared';
 import { httpInterceptorProviders } from './http-interceptors';
-
+import { AuthService } from './services/auth.service';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
-import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 import { LoginComponent } from './components/login/login.component';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -25,12 +24,26 @@ import { JwtHelperService } from '@auth0/angular-jwt';
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
-    CoreModule,
+    CommonModule,
+    HttpClientModule,
+    JwtModule.forRoot({
+      // TODO: move to config
+      config: {
+        tokenGetter: () => localStorage.getItem('token'),
+        authScheme: 'Token ',
+        skipWhenExpired: true,
+        whitelistedDomains: ['localhost:8000'],
+        blacklistedRoutes: ['http://localhost:8000/api/users/login']
+      }
+    }),
+    AppRoutingModule,
     SharedModule,
-
-    AppRoutingModule
   ],
-  providers: [MediaMatcher, httpInterceptorProviders/*, JwtHelperService*/],
+  providers: [
+    AuthService,
+    MediaMatcher,
+    httpInterceptorProviders
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

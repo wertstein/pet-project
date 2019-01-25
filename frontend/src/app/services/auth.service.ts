@@ -19,15 +19,6 @@ export class AuthService {
     return localStorage.getItem('token');
   }
 
-  // get user() {
-  //   return jwtDecode(this.token).email;
-  // }
-
-  // get isAuthenticated(): boolean {
-  //   // return this.jwtHelperService.isTokenExpired('token');
-  //   return true;
-  // }
-
   // store the URL so we can redirect after logging in
   redirectUrl: string;
 
