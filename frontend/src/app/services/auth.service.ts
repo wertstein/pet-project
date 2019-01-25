@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap, share } from 'rxjs/operators';
 import * as jwtDecode from 'jwt-decode';
 // import { JwtHelperService } from '@auth0/angular-jwt';
 
@@ -10,12 +9,24 @@ const API = 'http://localhost:8000/api';
 
 @Injectable()
 export class AuthService {
-  isLoggedIn = false;
+  isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
 
   constructor(
-    private http: HttpClient
-  ) // private jwtHelperService: JwtHelperService
-  {}
+    private http: HttpClient // private jwtHelperService: JwtHelperService
+  ) {}
+
+  get token(): string {
+    return localStorage.getItem('token');
+  }
+
+  // get user() {
+  //   return jwtDecode(this.token).email;
+  // }
+
+  // get isAuthenticated(): boolean {
+  //   // return this.jwtHelperService.isTokenExpired('token');
+  //   return true;
+  // }
 
   // store the URL so we can redirect after logging in
   redirectUrl: string;
@@ -24,35 +35,25 @@ export class AuthService {
     return this.http.post(`${API}/users/login`, { user }).pipe(
       tap((response: { user }) => {
         localStorage.setItem('token', response.user.token);
-      }),
-      tap(val => (this.isLoggedIn = true))
+        this.isLoginSubject.next(true);
+      })
     );
   }
 
-  logout(): Observable<any> {
-    this.isLoggedIn = false;
+  logout() {
     this.eraseToken();
-    return this.http
-      .post(`${API}/logout`, null)
-      .pipe(tap(val => (this.isLoggedIn = false)));
   }
 
-  get token(): string {
-    const token = localStorage.getItem('token');
-
-    return token ? `Token ${token}` : null;
+  isLoggedIn(): Observable<boolean> {
+    return this.isLoginSubject.asObservable().pipe(share());
   }
 
-  eraseToken() {
+  private eraseToken() {
     localStorage.removeItem('token');
+    this.isLoginSubject.next(false);
   }
 
-  get user() {
-    return jwtDecode(this.token).email;
-  }
-
-  get isAuthenticated(): boolean {
-    // return this.jwtHelperService.isTokenExpired('token');
-    return true;
+  private hasToken(): boolean {
+    return !!localStorage.getItem('token');
   }
 }

@@ -17,44 +17,27 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     public authService: AuthService
-  ) {
-    this.setMessage();
-  }
+  ) {}
 
   ngOnInit() {
-    this.form = this.fb.group(
-      {
-        email: ['user1@example.com', Validators.email],
-        password: ['Password1', Validators.required]
-      }
-    );
-  }
-
-  setMessage() {
-    this.message = 'Logged ' + (this.authService.isLoggedIn ? 'in' : 'out');
+    this.form = this.fb.group({
+      email: ['user1@example.com', Validators.email],
+      password: ['Password1', Validators.required]
+    });
   }
 
   login() {
-    this.message = 'Trying to log in ...';
-
     this.authService.login(this.form.value).subscribe(() => {
-      this.setMessage();
       if (this.authService.isLoggedIn) {
         // Get the redirect URL from our auth service
         // If no redirect has been set, use the default
         const redirect = this.authService.redirectUrl
           ? this.authService.redirectUrl
-          : '/admin';
+          : '/home';
 
         // Redirect the user
         this.router.navigate([redirect]);
       }
     });
-  }
-
-  logout() {
-    this.authService.logout()
-      .subscribe();
-    this.setMessage();
   }
 }
