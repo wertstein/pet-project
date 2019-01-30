@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { NgModule } from '@angular/core';
-import { JwtHelperService, JwtModule } from '@auth0/angular-jwt';
+import { JwtModule } from '@auth0/angular-jwt';
 import { AppRoutingModule } from './app-routing.module';
 import { SharedModule } from './shared';
 import { httpInterceptorProviders } from './http-interceptors';
@@ -13,6 +13,10 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
+
+export function tokenGetter() {
+  return localStorage.getItem('token');
+}
 
 @NgModule({
   declarations: [
@@ -29,7 +33,7 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
     JwtModule.forRoot({
       // TODO: move to config
       config: {
-        tokenGetter: () => localStorage.getItem('token'),
+        tokenGetter,
         authScheme: 'Token ',
         skipWhenExpired: true,
         whitelistedDomains: ['localhost:8000'],
@@ -37,13 +41,9 @@ import { PageNotFoundComponent } from './components/page-not-found/page-not-foun
       }
     }),
     AppRoutingModule,
-    SharedModule,
+    SharedModule
   ],
-  providers: [
-    AuthService,
-    MediaMatcher,
-    httpInterceptorProviders
-  ],
+  providers: [AuthService, MediaMatcher, httpInterceptorProviders],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
