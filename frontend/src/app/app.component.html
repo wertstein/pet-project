@@ -18,7 +18,7 @@
     >
       <mat-nav-list>
         <a mat-list-item routerLink="">Home</a>
-        <ng-container *ngIf="(authService.isLoggedIn() | async); else loginLink">
+        <ng-container *ngIf="(authService.loggedIn | async); else loginLink">
           <a
             mat-list-item
             [routerLink]="nav.link"
