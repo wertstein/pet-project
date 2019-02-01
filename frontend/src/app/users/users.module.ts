@@ -4,8 +4,8 @@ import { FormsModule } from '@angular/forms';
 
 import { SharedModule } from '../shared';
 import { UsersRoutingModule } from './users-routing.module';
-import { UserDetailsComponent } from './components/user-details';
-import { UserListComponent } from './components/user-list';
+import { UserDetailsComponent } from './components/user-details/user-details.component';
+import { UserListComponent } from './components/user-list/user-list.component';
 import { UsersService } from './services/users.service';
 import { UserDetailsResolver } from './services/user-details-resolver.service';
 import { UserListResolver } from './services/user-list-resolver.service';

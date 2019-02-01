@@ -1,58 +1,64 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { Observable, BehaviorSubject } from 'rxjs';
+import { share, map } from 'rxjs/operators';
+import { User } from '../models/user';
+import { config } from '../../config';
 
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
-import * as jwtDecode from 'jwt-decode';
-// import { JwtHelperService } from '@auth0/angular-jwt';
-
-const API = 'http://localhost:8000/api';
+const TOKEN_NAME = 'token';
 
 @Injectable()
 export class AuthService {
-  isLoggedIn = false;
-
-  constructor(
-    private http: HttpClient
-  ) // private jwtHelperService: JwtHelperService
-  {}
-
-  // store the URL so we can redirect after logging in
   redirectUrl: string;
 
+  get loggedIn(): Observable<User> {
+    return this.isLoginSubject.asObservable().pipe(share());
+  }
+
+  get tokenExpired(): boolean {
+    return this.jwtService.isTokenExpired(this.token);
+  }
+
+  private isLoginSubject = new BehaviorSubject<User>(
+    !this.tokenExpired && this.user
+  );
+
+  private get token(): string {
+    return localStorage.getItem(TOKEN_NAME);
+  }
+
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private jwtService: JwtHelperService
+  ) {}
+
   login(user: { email: string; password: string }): Observable<any> {
-    return this.http.post(`${API}/users/login`, { user }).pipe(
-      tap((response: { user }) => {
-        localStorage.setItem('token', response.user.token);
-      }),
-      tap(val => (this.isLoggedIn = true))
+    return this.http.post(`${config.api}/users/login`, { user }).pipe(
+      map((response: { token }) => {
+        localStorage.setItem(TOKEN_NAME, response.token);
+
+        this.isLoginSubject.next(this.user);
+
+        this.router.navigate([this.redirectUrl || '']);
+      })
     );
   }
 
-  logout(): Observable<any> {
-    this.isLoggedIn = false;
+  logout() {
     this.eraseToken();
-    return this.http
-      .post(`${API}/logout`, null)
-      .pipe(tap(val => (this.isLoggedIn = false)));
   }
 
-  get token(): string {
-    const token = localStorage.getItem('token');
+  private get user(): User {
+    const { email } = this.jwtService.decodeToken(this.token);
 
-    return token ? `Token ${token}` : null;
+    return new User({ email });
   }
 
-  eraseToken() {
+  private eraseToken() {
     localStorage.removeItem('token');
-  }
-
-  get user() {
-    return jwtDecode(this.token).email;
-  }
-
-  get isAuthenticated(): boolean {
-    // return this.jwtHelperService.isTokenExpired('token');
-    return true;
+    this.isLoginSubject.next(null);
   }
 }
