@@ -5,14 +5,15 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { share, map } from 'rxjs/operators';
 import { User } from '../models/user';
-
-const API = 'http://localhost:8000/api';
+import { config } from '../../config';
 
 const TOKEN_NAME = 'token';
 
 @Injectable()
 export class AuthService {
-  get loggedIn(): Observable<boolean> {
+  redirectUrl: string;
+
+  get loggedIn(): Observable<User> {
     return this.isLoginSubject.asObservable().pipe(share());
   }
 
@@ -20,7 +21,9 @@ export class AuthService {
     return this.jwtService.isTokenExpired(this.token);
   }
 
-  private isLoginSubject = new BehaviorSubject<boolean>(this.hasToken());
+  private isLoginSubject = new BehaviorSubject<User>(
+    !this.tokenExpired && this.user
+  );
 
   private get token(): string {
     return localStorage.getItem(TOKEN_NAME);
@@ -32,18 +35,12 @@ export class AuthService {
     private jwtService: JwtHelperService
   ) {}
 
-  redirectUrl: string;
-
   login(user: { email: string; password: string }): Observable<any> {
-    return this.http.post(`${API}/users/login`, { user }).pipe(
+    return this.http.post(`${config.api}/users/login`, { user }).pipe(
       map((response: { token }) => {
         localStorage.setItem(TOKEN_NAME, response.token);
 
-        // const { email } = this.jwtService.decodeToken(response.token);
-
-        // const user1: User = new User({ email });
-
-        this.isLoginSubject.next(true);
+        this.isLoginSubject.next(this.user);
 
         this.router.navigate([this.redirectUrl || '']);
       })
@@ -54,12 +51,14 @@ export class AuthService {
     this.eraseToken();
   }
 
-  private eraseToken() {
-    localStorage.removeItem('token');
-    this.isLoginSubject.next(false);
+  private get user(): User {
+    const { email } = this.jwtService.decodeToken(this.token);
+
+    return new User({ email });
   }
 
-  private hasToken(): boolean {
-    return !!localStorage.getItem('token');
+  private eraseToken() {
+    localStorage.removeItem('token');
+    this.isLoginSubject.next(null);
   }
 }

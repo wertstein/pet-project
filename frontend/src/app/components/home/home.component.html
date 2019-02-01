@@ -1,1 +1,8 @@
 <h1>Welcome!</h1>
+
+<div *ngIf="(authService.loggedIn | async); else newUser">
+  We missed you, <strong>{{ (authService.loggedIn | async).email }}</strong
+  >!
+</div>
+
+<ng-template #newUser> <div>Good to see new face</div> </ng-template>

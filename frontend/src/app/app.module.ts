@@ -13,10 +13,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { PageNotFoundComponent } from './components/page-not-found/page-not-found.component';
-
-export function tokenGetter() {
-  return localStorage.getItem('token');
-}
+import { jwt } from '../config';
 
 @NgModule({
   declarations: [
@@ -31,14 +28,7 @@ export function tokenGetter() {
     CommonModule,
     HttpClientModule,
     JwtModule.forRoot({
-      // TODO: move to config
-      config: {
-        tokenGetter,
-        authScheme: 'Token ',
-        skipWhenExpired: true,
-        whitelistedDomains: ['localhost:8000'],
-        blacklistedRoutes: ['http://localhost:8000/api/users/login']
-      }
+      config: jwt
     }),
     AppRoutingModule,
     SharedModule
