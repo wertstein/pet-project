@@ -3,14 +3,15 @@ const path = require('path');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const cors = require('cors');
-const mongoose = require('mongoose');
 const errorHandler = require('errorhandler');
 
 const config = require('./config/config');
 
-mongoose.promise = global.Promise;
+const initDB = require('./db');
 
 const isProduction = process.env.NODE_ENV === 'production';
+
+initDB();
 
 const app = express();
 
@@ -25,14 +26,13 @@ if (!isProduction) {
   app.use(errorHandler());
 }
 
-mongoose.connect(config.connectionString);
-mongoose.set('debug', true);
-
+require('./models/Forecast');
 require('./models/Users');
+
 require('./config/passport');
 app.use(require('./routes'));
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   const { name, message } = err;
   res.status(err.status || 500).json({ error: { name, message } });
 });
