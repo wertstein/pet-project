@@ -1,12 +1,13 @@
 module.exports = {
   auth: {
-    tokenExpiration: 1
+    tokenExpiration: 1,
   },
-  connectionString: "mongodb://admin:Siewird4@ds161894.mlab.com:61894/pet",
+  connectionString: 'mongodb://admin:Siewird4@ds161894.mlab.com:61894/pet',
   session: {
-    secret: "passport-tutorial",
+    secret: 'passport-tutorial',
     cookie: { maxAge: 60000 },
     resave: false,
-    saveUninitialized: false
-  }
+    saveUninitialized: false,
+  },
+  apixu: { apikey: 'f6d5b7815afd46d29ba205704190302' },
 };
