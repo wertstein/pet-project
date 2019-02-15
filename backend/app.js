@@ -1,19 +1,13 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const session = require('express-session');
-const cors = require('cors');
-const errorHandler = require('errorhandler');
-
-const config = require('./config/config');
-
-const initDB = require('./db');
-
-const isProduction = process.env.NODE_ENV === 'production';
-
-initDB();
-
-const app = express();
+const express = require('express'),
+  path = require('path'),
+  bodyParser = require('body-parser'),
+  session = require('express-session'),
+  cors = require('cors'),
+  errorHandler = require('errorhandler'),
+  config = require('./config/config'),
+  initDB = require('./db'),
+  isProduction = process.env.NODE_ENV === 'production',
+  app = express();
 
 app.use(cors());
 app.use(require('morgan')('dev'));
@@ -26,15 +20,49 @@ if (!isProduction) {
   app.use(errorHandler());
 }
 
+initDB();
+
 require('./models/Forecast');
 require('./models/Users');
 
 require('./config/passport');
+
 app.use(require('./routes'));
 
-app.use((err, req, res) => {
-  const { name, message } = err;
-  res.status(err.status || 500).json({ error: { name, message } });
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  const err = new Error('Not Found');
+  err.status = 404;
+  next(err);
 });
 
-app.listen(8000, () => console.log('Server running on http://localhost:8000/'));
+// development error handler
+if (!isProduction) {
+  app.use(function(err, req, res, next) /* eslint-disable-line */ {
+    console.log(err.stack); /* eslint-disable-line */
+
+    res.status(err.status || 500);
+
+    res.json({
+      errors: {
+        message: err.message,
+        error: err,
+      },
+    });
+  });
+}
+
+// production error handler
+app.use(function(err, req, res, next) /* eslint-disable-line */ {
+  res.status(err.status || 500);
+  res.json({
+    errors: {
+      message: err.message,
+      error: {},
+    },
+  });
+});
+
+const server = app.listen(process.env.PORT || config.port, () => {
+  console.log(`Server running on http://localhost:${server.address().port}/`);
+});
