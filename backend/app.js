@@ -7,9 +7,11 @@ const express = require('express'),
   config = require('./config/config'),
   initDB = require('./db'),
   isProduction = process.env.NODE_ENV === 'production',
-  app = express();
+  app = express(),
+  http = require('http'),
+  socket = require('socket.io');
 
-app.use(cors());
+app.use(cors({ origin: 'http://localhost:4200', credentials: true }));
 app.use(require('morgan')('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -63,6 +65,30 @@ app.use(function(err, req, res, next) /* eslint-disable-line */ {
   });
 });
 
-const server = app.listen(process.env.PORT || config.port, () => {
-  console.log(`Server running on http://localhost:${server.address().port}/`);
+const server = http
+  .createServer(app)
+  .listen(process.env.PORT || config.port, function() {
+    console.log('Express server listening on port ' + app.get('port'));
+  });
+
+const io = socket.listen(server);
+
+io.on('connection', socket => {
+  console.log('WS: a user connected');
+
+  socket.on('disconnect', () => {
+    console.log('WS: user disconnected');
+  });
+
+  socket.on('message', () => {
+    console.log('WS: user sent message');
+  });
 });
+
+// io.emit('message', { for: 'everyone' });
+
+let i = 0;
+setInterval(() => {
+  io.emit('message', { for: 'everyone' }, i);
+  i++;
+}, 2000);

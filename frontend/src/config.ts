@@ -3,7 +3,7 @@ export function tokenGetter() {
 }
 
 export const config = {
-  api: 'http://localhost:8000/api'
+  api: 'http://localhost:8000/api',
 };
 
 export const jwt = {
@@ -11,5 +11,5 @@ export const jwt = {
   authScheme: 'Token ',
   skipWhenExpired: true,
   whitelistedDomains: ['localhost:8000'],
-  blacklistedRoutes: ['http://localhost:8000/api/users/login']
+  blacklistedRoutes: ['http://localhost:8000/api/users/login'],
 };
