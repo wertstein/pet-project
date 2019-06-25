@@ -15,8 +15,8 @@ const appRoutes: Routes = [
   { path: 'home', component: HomeComponent, data: { title: 'Home' } },
   { path: 'login', component: LoginComponent, data: { title: 'Login' } },
 
-  { path: 'admin', loadChildren: 'app/admin/admin.module#AdminModule' },
-  { path: 'users', loadChildren: 'app/users/users.module#UsersModule' },
+  { path: 'admin', loadChildren: () => import('app/admin/admin.module').then(m => m.AdminModule) },
+  { path: 'users', loadChildren: () => import('app/users/users.module').then(m => m.UsersModule) },
 
   { path: '**', component: PageNotFoundComponent }
 ];
